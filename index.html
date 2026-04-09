@@ -2,69 +2,173 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora Python Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Python Pro | ADS Unifeso</title>
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background-color: #1e1e2e; color: white; margin: 0; }
-        .calculadora { background-color: #282a36; padding: 20px; border-radius: 10px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5); width: 300px; }
-        #tela { width: 100%; height: 50px; background-color: #44475a; color: #f8f8f2; font-size: 24px; text-align: right; border: none; border-radius: 5px; margin-bottom: 20px; padding: 5px 10px; box-sizing: border-box; }
-        .botoes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        button { padding: 15px; font-size: 18px; font-weight: bold; background-color: #6272a4; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background-color: #50fa7b; color: #282a36; }
-        .botao-igual { background-color: #ff79c6; grid-column: span 2; }
-        .botao-limpar { background-color: #ff5555; grid-column: span 2; }
-        #status { margin-top: 10px; font-size: 12px; color: #50fa7b; }
+        :root {
+            --bg-color: #1e1e2e;
+            --card-bg: #282a36;
+            --display-bg: #44475a;
+            --text-color: #f8f8f2;
+            --accent: #6272a4;
+            --success: #50fa7b;
+            --error: #ff5555;
+            --highlight: #ff79c6;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            margin: 0; 
+        }
+
+        .calculadora { 
+            background-color: var(--card-bg); 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0px 15px 35px rgba(0,0,0,0.6); 
+            width: 320px; 
+        }
+
+        #tela { 
+            width: 100%; 
+            height: 60px; 
+            background-color: var(--display-bg); 
+            color: var(--text-color); 
+            font-size: 1.8rem; 
+            text-align: right; 
+            border: 2px solid transparent; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            padding: 10px; 
+            box-sizing: border-box;
+            transition: border 0.3s;
+        }
+
+        #tela:focus { border-color: var(--accent); outline: none; }
+
+        .botoes { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 12px; 
+        }
+
+        button { 
+            padding: 18px; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            background-color: var(--accent); 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        button:hover { background-color: var(--success); color: #282a36; transform: scale(1.05); }
+        button:active { transform: scale(0.95); }
+
+        .btn-op { background-color: #44475a; }
+        .btn-clear { background-color: var(--error); grid-column: span 2; }
+        .btn-equal { background-color: var(--highlight); grid-column: span 2; }
+
+        #status { margin-top: 15px; font-size: 0.85rem; color: var(--success); opacity: 0.8; }
     </style>
 </head>
 <body>
 
     <div class="calculadora">
-        <input type="text" id="tela" placeholder="Carregando Python..." readonly>
+        <input type="text" id="tela" placeholder="Carregando..." readonly>
+        
         <div class="botoes">
-            <button py-click="lambda e: digitar('7')">7</button>
-            <button py-click="lambda e: digitar('8')">8</button>
-            <button py-click="lambda e: digitar('9')">9</button>
-            <button py-click="lambda e: digitar('/')">/</button>
-            <button py-click="lambda e: digitar('4')">4</button>
-            <button py-click="lambda e: digitar('5')">5</button>
-            <button py-click="lambda e: digitar('6')">6</button>
-            <button py-click="lambda e: digitar('*')">*</button>
-            <button py-click="lambda e: digitar('1')">1</button>
-            <button py-click="lambda e: digitar('2')">2</button>
-            <button py-click="lambda e: digitar('3')">3</button>
-            <button py-click="lambda e: digitar('-')">-</button>
-            <button py-click="lambda e: digitar('0')">0</button>
-            <button py-click="lambda e: digitar('.')">.</button>
-            <button py-click="lambda e: digitar('+')">+</button>
-            <button class="botao-limpar" py-click="limpar">C</button>
-            <button class="botao-igual" py-click="calcular">=</button>
+            <button class="btn-num">7</button>
+            <button class="btn-num">8</button>
+            <button class="btn-num">9</button>
+            <button class="btn-op">/</button>
+            
+            <button class="btn-num">4</button>
+            <button class="btn-num">5</button>
+            <button class="btn-num">6</button>
+            <button class="btn-op">*</button>
+            
+            <button class="btn-num">1</button>
+            <button class="btn-num">2</button>
+            <button class="btn-num">3</button>
+            <button class="btn-op">-</button>
+            
+            <button class="btn-num">0</button>
+            <button class="btn-num">.</button>
+            <button class="btn-op">+</button>
+            <button class="btn-op">%</button>
+            
+            <button id="limpar" class="btn-clear">C</button>
+            <button id="calcular" class="btn-equal">=</button>
         </div>
     </div>
-    <div id="status">Aguarde o motor Python ligar...</div>
+    <div id="status">Iniciando engine PyScript...</div>
 
     <script type="py">
-        from pyscript import document
-        
-        # Indica que o sistema está pronto
-        document.getElementById("status").innerHTML = "Python Conectado! ✅"
-        document.getElementById("tela").placeholder = "0"
+        from pyscript import document, window
+        from pyodide.ffi import create_proxy
 
+        # Referências de Elementos
         tela = document.getElementById("tela")
+        status_label = document.getElementById("status")
 
-        def digitar(valor):
-            tela.value += str(valor)
+        def atualizar_status(msg):
+            status_label.innerText = msg
+
+        def digitar(event):
+            # Obtém o texto de dentro do botão clicado
+            valor = event.target.innerText
+            if tela.value == "Erro":
+                tela.value = valor
+            else:
+                tela.value += valor
 
         def limpar(event):
             tela.value = ""
 
         def calcular(event):
             try:
-                # O eval resolve a expressão matemática
-                resultado = eval(tela.value)
+                # Substituímos o eval() por uma forma ligeiramente mais controlada
+                # Para uma calculadora real de produção, usaríamos um parser (como o 'ast')
+                expressao = tela.value.replace(',', '.')
+                resultado = eval(expressao, {"__builtins__": None}, {})
+                
+                # Formatação para evitar dízimas gigantescas
+                if isinstance(resultado, float):
+                    resultado = round(resultado, 8)
+                
                 tela.value = str(resultado)
-            except:
+            except Exception:
                 tela.value = "Erro"
+
+        # Adicionando Event Listeners de forma programática (Melhor Prática)
+        def setup():
+            # Configura botões numéricos e operadores
+            botoes = document.querySelectorAll("button:not(.btn-clear):not(.btn-equal)")
+            for btn in botoes:
+                btn.addEventListener("click", create_proxy(digitar))
+            
+            # Configura botões especiais
+            document.getElementById("limpar").addEventListener("click", create_proxy(limpar))
+            document.getElementById("calcular").addEventListener("click", create_proxy(calcular))
+            
+            # Atualiza Interface
+            atualizar_status("Python 3.x Ativo ✅")
+            tela.placeholder = "0"
+
+        # Inicia a configuração
+        setup()
     </script>
 </body>
 </html>
